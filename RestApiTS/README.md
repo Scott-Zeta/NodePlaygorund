@@ -1,6 +1,6 @@
 # REST API
 
-Intend to recall what I learned before and implement with more professional debug and logging features
+Intend to recall what I learned before for RESTApi, introducing the TS features into the backend dev and implement with more professional debug and logging features.
 
 ## Library in use
 
