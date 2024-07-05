@@ -10,8 +10,8 @@ Intend to recall what I learned before for RESTApi, introducing the TS features 
 
 ## Module Design
 
-- **Route Configuration**: Define the requests API can handle
-
+- **Route Configuration**: Define the requests API can handle.
+  New Features: 1. Extend abstract method in TS. Ensure children class always match with parent's signature or TS Complier will alarm.
 - **Service**: Tasks such as connecting to Database models, doing queries, connecting to external services that requried by specific request. (Functional Features)
 
 - **Middleware**: Running specific request validations before the final controller of a route handles its specifics. (Validation and Authentication)
