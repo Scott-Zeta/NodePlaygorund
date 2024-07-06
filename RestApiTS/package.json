@@ -4,6 +4,8 @@
   "description": "demo rest api",
   "main": "index.js",
   "scripts": {
+    "start": "tsc && node --unhandled-rejections=strict ./dist/app.js",
+    "debug": "export DEBUG=* && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -16,6 +18,10 @@
     "winston": "^3.13.0"
   },
   "devDependencies": {
-    "@types/node": "^20.14.10"
+    "@types/cors": "^2.8.17",
+    "@types/debug": "^4.1.12",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.10",
+    "typescript": "^5.5.3"
   }
 }
