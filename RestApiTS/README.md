@@ -36,7 +36,7 @@ Any piece of middleware, there are three types of fields:
 
 - **NextFunction**: The NextFunction serves as a callback function, allowing control to pass through any other middleware functions. Along the way, **all middleware will share the same request and response objects before the controller finally sends a response back to the requester.**
 
-## Controller
+## Start Up the App
 
 ### Feature from TS
 
