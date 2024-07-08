@@ -35,3 +35,9 @@ Any piece of middleware, there are three types of fields:
 - **Response**: The Response is likewise how Express.js represents the HTTP response, again extending the native Node.js response type.
 
 - **NextFunction**: The NextFunction serves as a callback function, allowing control to pass through any other middleware functions. Along the way, **all middleware will share the same request and response objects before the controller finally sends a response back to the requester.**
+
+## Start Up the App
+
+### Feature from TS
+
+1. `"start": "tsc && node --unhandled-rejections=strict ./dist/app.js"` for compile TS code to JS to `./dist`. Meanwhile, `--unhandled-rejections=strict`, app will shutdown if there is any unhandled Error, forcing handle any expected Error during dev and shutdown the app to prevent any unknown issue.
