@@ -11,7 +11,10 @@ const log: debug.IDebugger = debug('app:in-memory-dao');
 Using the singleton pattern, this class will always provide the same instance—and, 
 critically, the same users array—when we import it in other files.  
 */
-
+/* 
+In real production, all these will be replace by
+data base connection libaraies like mongoose or any other ORM
+*/
 class UsersDao {
   users: Array<CreateUserDto> = [];
 
@@ -71,6 +74,18 @@ class UsersDao {
     );
     this.users.splice(objIndex, 1);
     return `${userId} removed`;
+  }
+  // Bonus for get user by email to check duplicate
+  async getUserByEmail(email: string) {
+    const objIndex = this.users.findIndex(
+      (obj: { email: string }) => obj.email === email
+    );
+    let currentUser = this.users[objIndex];
+    if (currentUser) {
+      return currentUser;
+    } else {
+      return null;
+    }
   }
 }
 
