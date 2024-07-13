@@ -25,6 +25,15 @@ class UsersDao {
     this.users.push(user);
     return user.id;
   }
+  // Read functions
+  // Read all resources
+  async getUsers() {
+    return this.users;
+  }
+  // Read one by ID
+  async getUserById(userId: string) {
+    return this.users.find((user: { id: string }) => user.id === userId);
+  }
 }
 
 export default new UsersDao();
