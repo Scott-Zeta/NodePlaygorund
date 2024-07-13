@@ -46,6 +46,10 @@ Any piece of middleware, there are three types of fields:
 
 DAOs and DTOs can provide a native solution for interacting with DB and validation, similar to Schema and ORM. Usually it is not the preference for smaller projects, sometimes DTOs can get more complicated such as representing nested DB entities.
 
+### New features from TS
+
+Partial<T> in TS can create a new type by copying another type but making all fields be optional.
+
 ## Start Up the App
 
 ### Feature from TS
