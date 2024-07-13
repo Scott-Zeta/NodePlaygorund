@@ -34,6 +34,36 @@ class UsersDao {
   async getUserById(userId: string) {
     return this.users.find((user: { id: string }) => user.id === userId);
   }
+  // Update functions
+  // Overwrite entire object as PUT
+  async putUserById(userId: string, user: PutUserDto) {
+    const objIndex = this.users.findIndex(
+      (obj: { id: string }) => obj.id === userId
+    );
+    this.users.splice(objIndex, 1, user);
+    return `${user.id} updated via put`;
+  }
+  // Update part of object as PATCH
+  async patchUserById(userId: string, user: PatchUserDto) {
+    const objIndex = this.users.findIndex(
+      (obj: { id: string }) => obj.id === userId
+    );
+    let currentUser = this.users[objIndex];
+    const allowedPatchFields = [
+      'password',
+      'firstName',
+      'lastName',
+      'permissionLevel',
+    ];
+    for (let field of allowedPatchFields) {
+      if (field in user) {
+        // @ts-ignore
+        currentUser[field] = user[field];
+      }
+    }
+    this.users.splice(objIndex, 1, currentUser);
+    return `${user.id} patched`;
+  }
 }
 
 export default new UsersDao();
