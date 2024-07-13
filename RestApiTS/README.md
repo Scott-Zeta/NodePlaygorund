@@ -12,13 +12,13 @@ Intend to recall what I learned before for RESTApi, introducing the TS features 
 
 - **Route Configuration**: Define the requests API can handle.
 
-- **Service**: Tasks such as connecting to Database models, doing queries, connecting to external services that requried by specific request. (Functional Features)
+- **Service**: Tasks such as connecting to Database models, doing queries, connecting to external services that requried by specific request. Encapsulating Business Logic into functions that Middleware and Controllers can call.
 
-- **Middleware**: Running specific request validations before the final controller of a route handles its specifics. (Validation and Authentication)
+- **Middleware**: Running specific request validations before the final controller of a route handles its specifics. Validate prerequisite conditions before app calls the appropriate controller function.
 
-- **Models**: Defining data models matching a given database schema, to facilitate data storage and retrieval. (Processing data Defining)
+- **Models**: Defining data models matching a given database schema, to facilitate data storage and retrieval. Describe the data and aid in compile-time checks.
 
-- **Controllers**: Separating the route configuration from the code that finally (after any middleware) processes a route request, calls the above service functions if necessary, and gives a response to the client. (Deliver result to clients)
+- **Controllers**: Separating the route configuration from the code that finally (after any middleware) processes a route request, calls the above service functions if necessary, and gives a response to the client. Use Services to process the request before finally sending a response to requester.
 
 ## Route Configuration
 
@@ -35,6 +35,20 @@ Any piece of middleware, there are three types of fields:
 - **Response**: The Response is likewise how Express.js represents the HTTP response, again extending the native Node.js response type.
 
 - **NextFunction**: The NextFunction serves as a callback function, allowing control to pass through any other middleware functions. Along the way, **all middleware will share the same request and response objects before the controller finally sends a response back to the requester.**
+
+## Models
+
+### DAOs and DTOs
+
+- **Data Access Objects(DAOs)**: Responsible for connectiong to a defined DB and performing CRUD operations. DAOs are the service that use the DTOs.
+
+- **Data Transfer Objects(DTOs)**: An Object that holds the raw data that DAO will send to/receive from the DB. DTOs are objects that conform to data model types.
+
+DAOs and DTOs can provide a native solution for interacting with DB and validation, similar to Schema and ORM. Usually it is not the preference for smaller projects, sometimes DTOs can get more complicated such as representing nested DB entities.
+
+### New features from TS
+
+Partial<T> in TS can create a new type by copying another type but making all fields be optional.
 
 ## Start Up the App
 
