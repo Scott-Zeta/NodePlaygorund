@@ -64,6 +64,14 @@ class UsersDao {
     this.users.splice(objIndex, 1, currentUser);
     return `${user.id} patched`;
   }
+  // Delete functions
+  async removeUserById(userId: string) {
+    const objIndex = this.users.findIndex(
+      (obj: { id: string }) => obj.id === userId
+    );
+    this.users.splice(objIndex, 1);
+    return `${userId} removed`;
+  }
 }
 
 export default new UsersDao();
