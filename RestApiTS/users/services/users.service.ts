@@ -4,6 +4,7 @@ import { CreateUserDto } from '../dto/create.user.dto';
 import { PutUserDto } from '../dto/put.user.dto';
 import { PatchUserDto } from '../dto/patch.user.dto';
 
+//Controller call the Service, Service call the DAO
 class UsersService implements CRUD {
   async create(resource: CreateUserDto) {
     return UsersDao.addUser(resource);
