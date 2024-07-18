@@ -4,7 +4,7 @@ import debug from 'debug';
 
 const log: debug.IDebugger = debug('app:users-controller');
 class UsersMiddleware {
-  //validate requireed fields
+  // validate requireed fields
   async validateRequiredUserBodyFields(
     req: express.Request,
     res: express.Response,
@@ -19,7 +19,7 @@ class UsersMiddleware {
     }
   }
 
-  //validate same email doesn't exist
+  // validate same email doesn't exist
   async validateSameEmailDoesntExist(
     req: express.Request,
     res: express.Response,
@@ -30,6 +30,20 @@ class UsersMiddleware {
       res.status(400).send({ error: `User email already exists` });
     } else {
       next();
+    }
+  }
+
+  // email validation
+  async validateSameEmailBelongToSameUser(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
+    const user = await userService.getUserByEmail(req.body.email);
+    if (user && user.id === req.params.userId) {
+      next();
+    } else {
+      res.status(400).send({ error: `Invalid email` });
     }
   }
 }
