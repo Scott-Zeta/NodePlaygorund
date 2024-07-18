@@ -46,6 +46,37 @@ class UsersMiddleware {
       res.status(400).send({ error: `Invalid email` });
     }
   }
+
+  // Here we need to use an arrow function to bind `this` correctly
+  validatePatchEmail = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    if (req.body.email) {
+      log('Validating email', req.body.email);
+
+      this.validateSameEmailBelongToSameUser(req, res, next);
+    } else {
+      next();
+    }
+  };
+
+  // validate user exists
+  async validateUserExists(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
+    const user = await userService.readById(req.params.userId);
+    if (user) {
+      next();
+    } else {
+      res.status(404).send({
+        error: `User ${req.params.userId} not found`,
+      });
+    }
+  }
 }
 
 export default new UsersMiddleware();
