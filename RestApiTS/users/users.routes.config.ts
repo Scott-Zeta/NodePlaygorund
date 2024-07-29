@@ -36,10 +36,12 @@ export class UsersRoutes extends CommonRoutesConfig {
       .get(UsersController.getUserById)
       .delete(UsersController.removeUser);
 
-    /* ".all(UsersMiddleware.validateUserExists)" seems has conflict with the instruction,
-      instruction said it applied to every route including Put and Patch,
-      waiting for further validation.
+    /* ".all(UsersMiddleware.validateUserExists)" will applied to 
+        all the routes with /users/:userId
     */
+
+    /* In this case, PUT for overwrite entire object
+      Patch for only replace the part of Object that exist, it will not add new content */
     this.app.put(`/users/:userId`, [
       UsersMiddleware.validateRequiredUserBodyFields,
       UsersMiddleware.validateSameEmailBelongToSameUser,
