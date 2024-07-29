@@ -1,5 +1,8 @@
 // UsersRoute extends from common Route config
 import { CommonRoutesConfig } from '../common/common.routes.config';
+// import methods from class controller and middleware
+import UsersController from './controllers/users.controller';
+import UsersMiddleware from './middleware/users.middleware';
 import express from 'express';
 
 export class UsersRoutes extends CommonRoutesConfig {
@@ -7,21 +10,19 @@ export class UsersRoutes extends CommonRoutesConfig {
     super(app, 'UsersRoutes');
   }
 
-  configureRoutes() {
+  configureRoutes(): express.Application {
     // Two routes for /users and /users/:userId
     /* 
       1. Let any client call users endpoint with GET and POST request
       2. Let any client call users/:userId endpoint with GET, PUT, PATCH, DELETE request
         Middlewares will be added to the /users/:userId endpoint
     */
-    this.app
-      .route(`/users`)
-      .get((req: express.Request, res: express.Response) => {
-        res.status(200).send(`List of users`);
-      })
-      .post((req: express.Request, res: express.Response) => {
-        res.status(200).send(`Post to users`);
-      });
+    this.app.route(`/users`).get(UsersController.listUsers).post(
+      // As export new UsersMiddleware() with OOP, call the method from the class that has already created a new instance.
+      UsersMiddleware.validateRequiredUserBodyFields,
+      UsersMiddleware.validateSameEmailDoesntExist,
+      UsersController.createUser
+    );
 
     this.app
       .route(`/users/:userId`)
