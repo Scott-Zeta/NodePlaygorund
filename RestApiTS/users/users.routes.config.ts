@@ -24,32 +24,33 @@ export class UsersRoutes extends CommonRoutesConfig {
       UsersController.createUser
     );
 
+    // extract userId from the url parameter, assign to the body content
+    /* 
+    Middleware shall always be registered before the route need it.
+    */
+    this.app.param(`userId`, UsersMiddleware.extractUserId);
+
     this.app
       .route(`/users/:userId`)
-      .all(
-        (
-          req: express.Request,
-          res: express.Response,
-          next: express.NextFunction
-        ) => {
-          // this middleware function runs before any request to /users/:userId
-          // but it doesn't accomplish anything just yet---
-          // it simply passes control to the next applicable function below using next()
-          next();
-        }
-      )
-      .get((req: express.Request, res: express.Response) => {
-        res.status(200).send(`GET requested for id ${req.params.userId}`);
-      })
-      .put((req: express.Request, res: express.Response) => {
-        res.status(200).send(`PUT requested for id ${req.params.userId}`);
-      })
-      .patch((req: express.Request, res: express.Response) => {
-        res.status(200).send(`PATCH requested for id ${req.params.userId}`);
-      })
-      .delete((req: express.Request, res: express.Response) => {
-        res.status(200).send(`DELETE requested for id ${req.params.userId}`);
-      });
+      .all(UsersMiddleware.validateUserExists)
+      .get(UsersController.getUserById)
+      .delete(UsersController.removeUser);
+
+    /* ".all(UsersMiddleware.validateUserExists)" seems has conflict with the instruction,
+      instruction said it applied to every route including Put and Patch,
+      waiting for further validation.
+    */
+    this.app.put(`/users/:userId`, [
+      UsersMiddleware.validateRequiredUserBodyFields,
+      UsersMiddleware.validateSameEmailBelongToSameUser,
+      UsersController.put,
+    ]);
+
+    this.app.patch(`/users/:userId`, [
+      UsersMiddleware.validatePatchEmail,
+      UsersController.patch,
+    ]);
+
     return this.app;
   }
 }
