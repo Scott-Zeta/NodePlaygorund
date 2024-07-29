@@ -78,6 +78,7 @@ class UsersMiddleware {
     }
   }
 
+  // help function for extract userId
   async extractUserId(
     req: express.Request,
     res: express.Response,
