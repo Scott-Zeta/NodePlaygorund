@@ -55,3 +55,8 @@ Partial<T> in TS can create a new type by copying another type but making all fi
 ### Feature from TS
 
 1. `"start": "tsc && node --unhandled-rejections=strict ./dist/app.js"` for compile TS code to JS to `./dist`. Meanwhile, `--unhandled-rejections=strict`, app will shutdown if there is any unhandled Error, forcing handle any expected Error during dev and shutdown the app to prevent any unknown issue.
+
+## Run local DB service
+
+`docker-compose up -d`
+`docker-compose down`

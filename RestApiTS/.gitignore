@@ -1,0 +1,2 @@
+# Ignore data volumn folder used by Docker Compose for MongoDB
+data/
