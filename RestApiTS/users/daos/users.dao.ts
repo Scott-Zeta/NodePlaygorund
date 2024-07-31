@@ -1,3 +1,4 @@
+import User from '../model/user.schema';
 import { CreateUserDto } from '../dto/create.user.dto';
 import { PatchUserDto } from '../dto/patch.user.dto';
 import { PutUserDto } from '../dto/put.user.dto';
@@ -16,77 +17,26 @@ In real production, all these will be replace by
 data base connection libaraies like mongoose or any other ORM
 */
 class UsersDao {
-  users: Array<CreateUserDto> = [];
-
   constructor() {
     log('Created new instance of UsersDao');
   }
   // For CRUD operations
   // Create functions
-  async addUser(user: CreateUserDto) {
-    user.id = shortid.generate();
-    this.users.push(user);
-    return user.id;
-  }
+  async addUser(user: CreateUserDto) {}
   // Read functions
   // Read all resources
-  async getUsers() {
-    return this.users;
-  }
+  async getUsers() {}
   // Read one by ID
-  async getUserById(userId: string) {
-    return this.users.find((user: { id: string }) => user.id === userId);
-  }
+  async getUserById(userId: string) {}
   // Update functions
   // Overwrite entire object as PUT
-  async putUserById(userId: string, user: PutUserDto) {
-    const objIndex = this.users.findIndex(
-      (obj: { id: string }) => obj.id === userId
-    );
-    this.users.splice(objIndex, 1, user);
-    return `${user.id} updated via put`;
-  }
+  async putUserById(userId: string, user: PutUserDto) {}
   // Update part of object as PATCH
-  async patchUserById(userId: string, user: PatchUserDto) {
-    const objIndex = this.users.findIndex(
-      (obj: { id: string }) => obj.id === userId
-    );
-    let currentUser = this.users[objIndex];
-    const allowedPatchFields = [
-      'password',
-      'firstName',
-      'lastName',
-      'permissionLevel',
-    ];
-    for (let field of allowedPatchFields) {
-      if (field in user) {
-        // @ts-ignore
-        currentUser[field] = user[field];
-      }
-    }
-    this.users.splice(objIndex, 1, currentUser);
-    return `${user.id} patched`;
-  }
+  async patchUserById(userId: string, user: PatchUserDto) {}
   // Delete functions
-  async removeUserById(userId: string) {
-    const objIndex = this.users.findIndex(
-      (obj: { id: string }) => obj.id === userId
-    );
-    this.users.splice(objIndex, 1);
-    return `${userId} removed`;
-  }
+  async removeUserById(userId: string) {}
   // Bonus for get user by email to check duplicate
-  async getUserByEmail(email: string) {
-    const objIndex = this.users.findIndex(
-      (obj: { email: string }) => obj.email === email
-    );
-    let currentUser = this.users[objIndex];
-    if (currentUser) {
-      return currentUser;
-    } else {
-      return null;
-    }
-  }
+  async getUserByEmail(email: string) {}
 }
 
 export default new UsersDao();
