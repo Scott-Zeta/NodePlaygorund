@@ -61,12 +61,13 @@ class UsersDao {
       { new: true } //return the updated document
     ).exec();
 
-    return existingUser;
+    return `${userId} updated`;
   }
 
   // Delete functions
   async removeUserById(userId: string) {
-    return User.deleteOne({ _id: userId }).exec();
+    User.deleteOne({ _id: userId }).exec();
+    return `${userId} removed`;
   }
 }
 
