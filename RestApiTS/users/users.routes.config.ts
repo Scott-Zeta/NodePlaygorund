@@ -1,7 +1,7 @@
 // UsersRoute extends from common Route config
 import { CommonRoutesConfig } from '../common/common.routes.config';
 import BodyValidationMiddleware from '../common/middleware/body.validation.middleware';
-import { body } from 'express-validator';
+import UsersValidator from './validator/users.validators';
 // import methods from class controller and middleware
 import UsersController from './controllers/users.controller';
 import UsersMiddleware from './middleware/users.middleware';
@@ -24,10 +24,7 @@ export class UsersRoutes extends CommonRoutesConfig {
       .get(UsersController.listUsers)
       .post(
         // As export new UsersMiddleware() with OOP, call the method from the class that has already created a new instance.
-        body('email').isEmail(),
-        body('password')
-          .isLength({ min: 5 })
-          .withMessage('Must include password (5+ characters)'),
+        ...UsersValidator.createValidator(),
         BodyValidationMiddleware.verifyBodyFieldsErrors,
         UsersMiddleware.validateSameEmailDoesntExist,
         UsersController.createUser
@@ -52,27 +49,14 @@ export class UsersRoutes extends CommonRoutesConfig {
     /* In this case, PUT for overwrite entire object
       Patch for only replace the part of Object that exist, it will not add new content */
     this.app.put(`/users/:userId`, [
-      body('email').isEmail(),
-      body('password')
-        .isLength({ min: 5 })
-        .withMessage('Must include password (5+ characters)'),
-      body('firstName').isString(),
-      body('lastName').isString(),
-      body('permissionFlags').isInt(),
+      ...UsersValidator.updateValidator(),
       BodyValidationMiddleware.verifyBodyFieldsErrors,
       UsersMiddleware.validateSameEmailBelongToSameUser,
       UsersController.put,
     ]);
 
     this.app.patch(`/users/:userId`, [
-      body('email').isEmail().optional(),
-      body('password')
-        .isLength({ min: 5 })
-        .withMessage('Password must be 5+ characters')
-        .optional(),
-      body('firstName').isString().optional(),
-      body('lastName').isString().optional(),
-      body('permissionFlags').isInt().optional(),
+      ...UsersValidator.patchValidator(),
       BodyValidationMiddleware.verifyBodyFieldsErrors,
       UsersMiddleware.validatePatchEmail,
       UsersController.patch,
