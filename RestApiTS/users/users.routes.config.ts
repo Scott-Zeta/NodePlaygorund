@@ -1,5 +1,7 @@
 // UsersRoute extends from common Route config
 import { CommonRoutesConfig } from '../common/common.routes.config';
+import BodyValidationMiddleware from '../common/middleware/body.validation.middleware';
+import UsersValidator from './validator/users.validators';
 // import methods from class controller and middleware
 import UsersController from './controllers/users.controller';
 import UsersMiddleware from './middleware/users.middleware';
@@ -17,12 +19,16 @@ export class UsersRoutes extends CommonRoutesConfig {
       2. Let any client call users/:userId endpoint with GET, PUT, PATCH, DELETE request
         Middlewares will be added to the /users/:userId endpoint
     */
-    this.app.route(`/users`).get(UsersController.listUsers).post(
-      // As export new UsersMiddleware() with OOP, call the method from the class that has already created a new instance.
-      UsersMiddleware.validateRequiredUserBodyFields,
-      UsersMiddleware.validateSameEmailDoesntExist,
-      UsersController.createUser
-    );
+    this.app
+      .route(`/users`)
+      .get(UsersController.listUsers)
+      .post(
+        // As export new UsersMiddleware() with OOP, call the method from the class that has already created a new instance.
+        ...UsersValidator.createValidator(),
+        BodyValidationMiddleware.verifyBodyFieldsErrors,
+        UsersMiddleware.validateSameEmailDoesntExist,
+        UsersController.createUser
+      );
 
     // extract userId from the url parameter, assign to the body content
     /* 
@@ -43,12 +49,15 @@ export class UsersRoutes extends CommonRoutesConfig {
     /* In this case, PUT for overwrite entire object
       Patch for only replace the part of Object that exist, it will not add new content */
     this.app.put(`/users/:userId`, [
-      UsersMiddleware.validateRequiredUserBodyFields,
+      ...UsersValidator.updateValidator(),
+      BodyValidationMiddleware.verifyBodyFieldsErrors,
       UsersMiddleware.validateSameEmailBelongToSameUser,
       UsersController.put,
     ]);
 
     this.app.patch(`/users/:userId`, [
+      ...UsersValidator.patchValidator(),
+      BodyValidationMiddleware.verifyBodyFieldsErrors,
       UsersMiddleware.validatePatchEmail,
       UsersController.patch,
     ]);
