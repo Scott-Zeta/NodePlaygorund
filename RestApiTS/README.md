@@ -46,6 +46,14 @@ Any piece of middleware, there are three types of fields:
 
 DAOs and DTOs can provide a native solution for interacting with DB and validation, similar to Schema and ORM. Usually it is not the preference for smaller projects, sometimes DTOs can get more complicated such as representing nested DB entities.
 
+### Workflow Conclusion
+
+1. Request accepted by endpoint, content will be validated and transformed into a DTO(Data Transfer Objects) instance.
+2. DTO instance will be passed to DAO(Data Access Object).
+3. In DAO, a DB model will be created by its library, apply with Schema validation.
+4. Once all validation passed, DB Operation will be applied.
+   (Key Difference between workflow I used before: An addtional DTO instance layer between the request and DB operation. Since most simpler app just copy the request content without further change or decision, the DTO step has been droped)
+
 ### New features from TS
 
 Partial<T> in TS can create a new type by copying another type but making all fields be optional.

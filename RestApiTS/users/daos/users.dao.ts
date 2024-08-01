@@ -1,3 +1,4 @@
+import User from '../model/user.schema';
 import { CreateUserDto } from '../dto/create.user.dto';
 import { PatchUserDto } from '../dto/patch.user.dto';
 import { PutUserDto } from '../dto/put.user.dto';
@@ -23,69 +24,50 @@ class UsersDao {
   }
   // For CRUD operations
   // Create functions
-  async addUser(user: CreateUserDto) {
-    user.id = shortid.generate();
-    this.users.push(user);
-    return user.id;
+  async addUser(userFields: CreateUserDto) {
+    const userId = shortid.generate();
+    const user = new User({
+      _id: userId,
+      ...userFields,
+      permissionFlags: 1,
+    });
+    await user.save();
+    return userId;
   }
   // Read functions
-  // Read all resources
-  async getUsers() {
-    return this.users;
+  // Read all resources, add Pagination
+  async getUsers(limit = 25, page = 0) {
+    return User.find()
+      .limit(limit)
+      .skip(limit * page)
+      .exec();
   }
+
   // Read one by ID
   async getUserById(userId: string) {
-    return this.users.find((user: { id: string }) => user.id === userId);
+    return User.findOne({ _id: userId }).exec();
   }
+  async getUserByEmail(email: string) {
+    return User.findOne({ email: email }).exec();
+  }
+
   // Update functions
-  // Overwrite entire object as PUT
-  async putUserById(userId: string, user: PutUserDto) {
-    const objIndex = this.users.findIndex(
-      (obj: { id: string }) => obj.id === userId
-    );
-    this.users.splice(objIndex, 1, user);
-    return `${user.id} updated via put`;
+  /* Mongoose findOneAndUpdate() function can update the entire document 
+    or just part of it. So no need two for update and patch*/
+  async updateUserById(userId: string, userFields: PatchUserDto | PutUserDto) {
+    const existingUser = await User.findOneAndUpdate(
+      { _id: userId },
+      { $set: userFields },
+      { new: true } //return the updated document
+    ).exec();
+
+    return `${userId} updated`;
   }
-  // Update part of object as PATCH
-  async patchUserById(userId: string, user: PatchUserDto) {
-    const objIndex = this.users.findIndex(
-      (obj: { id: string }) => obj.id === userId
-    );
-    let currentUser = this.users[objIndex];
-    const allowedPatchFields = [
-      'password',
-      'firstName',
-      'lastName',
-      'permissionLevel',
-    ];
-    for (let field of allowedPatchFields) {
-      if (field in user) {
-        // @ts-ignore
-        currentUser[field] = user[field];
-      }
-    }
-    this.users.splice(objIndex, 1, currentUser);
-    return `${user.id} patched`;
-  }
+
   // Delete functions
   async removeUserById(userId: string) {
-    const objIndex = this.users.findIndex(
-      (obj: { id: string }) => obj.id === userId
-    );
-    this.users.splice(objIndex, 1);
+    User.deleteOne({ _id: userId }).exec();
     return `${userId} removed`;
-  }
-  // Bonus for get user by email to check duplicate
-  async getUserByEmail(email: string) {
-    const objIndex = this.users.findIndex(
-      (obj: { email: string }) => obj.email === email
-    );
-    let currentUser = this.users[objIndex];
-    if (currentUser) {
-      return currentUser;
-    } else {
-      return null;
-    }
   }
 }
 
