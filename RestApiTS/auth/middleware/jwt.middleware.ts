@@ -28,9 +28,13 @@ class JwtMiddleware {
     next: express.NextFunction
   ) {
     const user: any = await usersService.getUserByEmail(res.locals.jwt.email);
+    console.log(Buffer.from(res.locals.jwt.refreshKey.data));
     const salt = crypto.createSecretKey(
       Buffer.from(res.locals.jwt.refreshKey.data)
     );
+    console.log('JWT: ', res.locals.jwt);
+    console.log('Salt: ', res.locals.jwt.refreshKey);
+    // salt are identical, waiting for further analysing
     const hash = crypto
       .createHmac('sha512', salt)
       .update(res.locals.jwt.userId)

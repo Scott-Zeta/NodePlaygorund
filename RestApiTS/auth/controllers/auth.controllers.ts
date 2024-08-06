@@ -21,6 +21,7 @@ class AuthController {
     try {
       const refreshId =
         req.body.userId + crypto.randomBytes(16).toString('hex');
+      // !!!!Problems on ID!!!!
       const salt = crypto.createSecretKey(crypto.randomBytes(16));
       const hash = crypto
         .createHmac('sha512', salt)
@@ -31,6 +32,8 @@ class AuthController {
       const token = jwt.sign(req.body, jwtSecret, {
         expiresIn: tokenExpirationInSeconds,
       });
+      console.log('Body: ', req.body);
+      console.log('Salt: ', req.body.refreshKey);
       // !refreshtoken expiration has not set up yet!
       // send the token and refreshToken(session) to the client
       return res.status(201).send({ accessToken: token, refreshToken: hash });
