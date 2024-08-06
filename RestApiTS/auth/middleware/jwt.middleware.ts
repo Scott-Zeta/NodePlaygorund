@@ -35,6 +35,8 @@ class JwtMiddleware {
       .createHmac('sha512', salt)
       .update(res.locals.jwt.userId)
       .digest('base64');
+    console.log('Validation Hash: ', hash);
+    console.log('RefreshToken Received: ', req.body.refreshToken);
     if (hash === req.body.refreshToken) {
       req.body = {
         userId: user._id,
@@ -62,6 +64,7 @@ class JwtMiddleware {
           next();
         }
       } catch (err) {
+        console.log(err);
         return res.status(403).send();
       }
     } else {
