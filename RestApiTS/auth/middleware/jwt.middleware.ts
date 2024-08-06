@@ -35,7 +35,7 @@ class JwtMiddleware {
     );
     const hash = crypto
       .createHmac('sha512', salt)
-      .update(res.locals.jwt.userId + jwtSecret)
+      .update(res.locals.jwt.userId)
       .digest('base64');
     if (hash === req.body.refreshToken) {
       req.body = {
