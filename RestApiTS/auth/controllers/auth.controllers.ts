@@ -19,24 +19,23 @@ const tokenExpirationInSeconds = 36000;
 class AuthController {
   async createJWT(req: express.Request, res: express.Response) {
     try {
-      const refreshId =
-        req.body.userId + crypto.randomBytes(16).toString('hex');
-      // !!!!Problems on ID!!!!
+      const refreshId = req.body.userId + jwtSecret;
       const salt = crypto.createSecretKey(crypto.randomBytes(16));
-      const hash = crypto
+      //unreverseable hash for generating refreshtoken based on userId and jwtSecret
+      const refreshtoken = crypto
         .createHmac('sha512', salt)
         .update(refreshId)
         .digest('base64');
-      // save the salt for later usage
+      // Refreshkey(salt) is safe to transmit without encrption, export into jwt payload
       req.body.refreshKey = salt.export();
       const token = jwt.sign(req.body, jwtSecret, {
         expiresIn: tokenExpirationInSeconds,
       });
-      console.log('Body: ', req.body);
-      console.log('Salt: ', req.body.refreshKey);
       // !refreshtoken expiration has not set up yet!
       // send the token and refreshToken(session) to the client
-      return res.status(201).send({ accessToken: token, refreshToken: hash });
+      return res
+        .status(201)
+        .send({ accessToken: token, refreshToken: refreshtoken });
     } catch (err) {
       log('createJWT error: %O', err);
       return res.status(500).send();

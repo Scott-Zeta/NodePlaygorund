@@ -28,20 +28,17 @@ class JwtMiddleware {
     next: express.NextFunction
   ) {
     const user: any = await usersService.getUserByEmail(res.locals.jwt.email);
-    console.log(Buffer.from(res.locals.jwt.refreshKey.data));
+    // get refreshkey(salt) from jwt payload
     const salt = crypto.createSecretKey(
       Buffer.from(res.locals.jwt.refreshKey.data)
     );
-    console.log('JWT: ', res.locals.jwt);
-    console.log('Salt: ', res.locals.jwt.refreshKey);
-    // salt are identical, waiting for further analysing
-    const hash = crypto
+    // recreate refresh token with same salt, payload, and hash method for comparison
+    const recreateRefreshToken = crypto
       .createHmac('sha512', salt)
-      .update(res.locals.jwt.userId)
+      .update(res.locals.jwt.userId + jwtSecret)
       .digest('base64');
-    console.log('Validation Hash: ', hash);
-    console.log('RefreshToken Received: ', req.body.refreshToken);
-    if (hash === req.body.refreshToken) {
+    if (recreateRefreshToken === req.body.refreshToken) {
+      //if pass the comparison, set user info from DB query to req.body
       req.body = {
         userId: user._id,
         email: user.email,

@@ -22,6 +22,7 @@ export class AuthRoutes extends CommonRoutesConfig {
     ]);
 
     //token refresh route
+    //granting a new access token and a refresh token if both previous tokens are valid
     this.app.post(`/auth/refresh-token`, [
       jwtMiddleware.validJWTNeeded,
       jwtMiddleware.verifyRefreshBodyField,
