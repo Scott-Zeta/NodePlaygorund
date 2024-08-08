@@ -91,6 +91,12 @@ Output: 4`
 
 When the output is 0, we block the user; otherwise, we let them access what they are trying to access.
 
+### Important Notes for Permission and JWT
+
+When a site owner changes a user’s permissions—for example, to attempt to lock out a misbehaving user—the user won’t see this take effect until their next JWT refresh. That’s because the permissions check uses the JWT data itself to avoid an extra database hit.
+
+Services like Auth0 can help by offering automatic token rotation, but users will still experience unexpected app behavior during the time between rotations, however short that normally may be. To mitigate this, developers must take care to actively revoke refresh tokens in response to permissions changes.
+
 ## Start Up the App
 
 ### Feature from TS
