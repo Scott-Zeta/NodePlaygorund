@@ -68,6 +68,7 @@ export class UsersRoutes extends CommonRoutesConfig {
       ...UsersValidator.updateValidator(),
       BodyValidationMiddleware.verifyBodyFieldsErrors,
       UsersMiddleware.validateSameEmailBelongToSameUser,
+      UsersMiddleware.userCantChangePermission,
       UsersController.put,
     ]);
 
@@ -75,6 +76,7 @@ export class UsersRoutes extends CommonRoutesConfig {
       ...UsersValidator.patchValidator(),
       BodyValidationMiddleware.verifyBodyFieldsErrors,
       UsersMiddleware.validatePatchEmail,
+      UsersMiddleware.userCantChangePermission,
       UsersController.patch,
     ]);
 
