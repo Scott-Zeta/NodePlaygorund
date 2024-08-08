@@ -2,6 +2,7 @@ import User from '../model/user.schema';
 import { CreateUserDto } from '../dto/create.user.dto';
 import { PatchUserDto } from '../dto/patch.user.dto';
 import { PutUserDto } from '../dto/put.user.dto';
+import { PermissionFlag } from '../../common/middleware/common.permissionflag.enum';
 
 import shortid from 'shortid';
 import debug from 'debug';
@@ -29,7 +30,7 @@ class UsersDao {
     const user = new User({
       _id: userId,
       ...userFields,
-      permissionFlags: 1,
+      permissionFlags: PermissionFlag.FREE_PERMISSION,
     });
     await user.save();
     return userId;

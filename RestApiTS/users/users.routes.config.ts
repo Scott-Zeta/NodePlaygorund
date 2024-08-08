@@ -5,6 +5,10 @@ import UsersValidator from './validator/users.validators';
 // import methods from class controller and middleware
 import UsersController from './controllers/users.controller';
 import UsersMiddleware from './middleware/users.middleware';
+// import permission middleware related
+import jwtMiddleware from '../auth/middleware/jwt.middleware';
+import permissionMiddleware from '../common/middleware/common.permission.middleware';
+import { PermissionFlag } from '../common/middleware/common.permissionflag.enum';
 import express from 'express';
 
 export class UsersRoutes extends CommonRoutesConfig {
@@ -21,7 +25,14 @@ export class UsersRoutes extends CommonRoutesConfig {
     */
     this.app
       .route(`/users`)
-      .get(UsersController.listUsers)
+      /* Get all user will only be accessible by admin permsission */
+      .get(
+        jwtMiddleware.validJWTNeeded,
+        permissionMiddleware.permissionFlagRequired(
+          PermissionFlag.ADMIN_PERMISSION
+        ),
+        UsersController.listUsers
+      )
       .post(
         // As export new UsersMiddleware() with OOP, call the method from the class that has already created a new instance.
         ...UsersValidator.createValidator(),
@@ -38,7 +49,12 @@ export class UsersRoutes extends CommonRoutesConfig {
 
     this.app
       .route(`/users/:userId`)
-      .all(UsersMiddleware.validateUserExists)
+      /* Operation on specifc ID needs Owner or Admin permission*/
+      .all(
+        UsersMiddleware.validateUserExists,
+        jwtMiddleware.validJWTNeeded,
+        permissionMiddleware.authorisedByOwnerOrAdmin
+      )
       .get(UsersController.getUserById)
       .delete(UsersController.removeUser);
 
@@ -52,6 +68,7 @@ export class UsersRoutes extends CommonRoutesConfig {
       ...UsersValidator.updateValidator(),
       BodyValidationMiddleware.verifyBodyFieldsErrors,
       UsersMiddleware.validateSameEmailBelongToSameUser,
+      UsersMiddleware.userCantChangePermission,
       UsersController.put,
     ]);
 
@@ -59,6 +76,7 @@ export class UsersRoutes extends CommonRoutesConfig {
       ...UsersValidator.patchValidator(),
       BodyValidationMiddleware.verifyBodyFieldsErrors,
       UsersMiddleware.validatePatchEmail,
+      UsersMiddleware.userCantChangePermission,
       UsersController.patch,
     ]);
 

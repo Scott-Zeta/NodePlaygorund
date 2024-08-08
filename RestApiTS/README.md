@@ -58,6 +58,45 @@ DAOs and DTOs can provide a native solution for interacting with DB and validati
 
 Partial<T> in TS can create a new type by copying another type but making all fields be optional.
 
+## Permission Flag
+
+Bit wise AND `&` and power of 2 numbers(1, 2, 4, 8,...) can be used for implement permission up to 31 flags.
+For an example, an audio-accessible, international blog might have these permissions:
+
+- 1: Authors can edit text.
+- 2: Illustrators can replace illustrations.
+- 4: Narrators can replace the audio file corresponding to any paragraph.
+- 8: Translators can edit translations.
+
+This approach allows for all sorts of permission flag combinations for users:
+
+- An author’s (or editor’s) permission flags value will be just the number 1.
+- An illustrator’s permission flags will be the number 2. But some authors are also illustrators. In that case, we sum the relevant permissions values: 1 + 2 = 3.
+- A narrator’s flags will be 4. In the case of an author who narrates their own work, it will be 1 + 4 = 5. If they also illustrate, it’s 1 + 2 + 4 = 7.
+  A translator will have a permission value of 8. Multilingual authors would then have flags of 1 + 8 = 9. A translator who also narrates (but is not an author) would have 4 + 8 = 12.
+- If we want to have a sudo admin, having all combined permissions, we can simply use 2,147,483,647, which is the maximum safe value for a 32-bit integer.
+  Readers can test this logic as plain JavaScript:
+
+- User with permission 5 trying to edit text (permission flag 1):
+  `Input: 5 & 1
+Output: 1`
+
+- User with permission 1 trying to narrate (permission flag 4):
+  `Input: 1 & 4
+Output: 0`
+
+- User with permission 12 trying to narrate:
+  `Input: 12 & 4
+Output: 4`
+
+When the output is 0, we block the user; otherwise, we let them access what they are trying to access.
+
+### Important Notes for Permission and JWT
+
+When a site owner changes a user’s permissions—for example, to attempt to lock out a misbehaving user—the user won’t see this take effect until their next JWT refresh. That’s because the permissions check uses the JWT data itself to avoid an extra database hit.
+
+Services like Auth0 can help by offering automatic token rotation, but users will still experience unexpected app behavior during the time between rotations, however short that normally may be. To mitigate this, developers must take care to actively revoke refresh tokens in response to permissions changes.
+
 ## Start Up the App
 
 ### Feature from TS
