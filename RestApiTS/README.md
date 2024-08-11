@@ -97,6 +97,13 @@ When a site owner changes a user’s permissions—for example, to attempt to lo
 
 Services like Auth0 can help by offering automatic token rotation, but users will still experience unexpected app behavior during the time between rotations, however short that normally may be. To mitigate this, developers must take care to actively revoke refresh tokens in response to permissions changes.
 
+## Testing
+
+- Mocha: manage application and run the tests
+- Chai: allow for more readable test expression
+- SuperTest: facilitate end-to-end (E2E) testing by calling our API as a REST client would
+- ts-node: TypeScript execution environment and REPL for Node.js. It allows you to run TypeScript files directly without pre-compiling them into JavaScript
+
 ## Start Up the App
 
 ### Feature from TS
