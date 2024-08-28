@@ -20,7 +20,8 @@
     "@graphql-yoga/node": "^3.9.1",
     "@pothos/core": "^4.2.0",
     "@prisma/client": "^5.18.0",
-    "graphql": "^16.9.0"
+    "graphql": "^16.9.0",
+    "graphql-scalars": "^1.23.0"
   },
   "prisma": {
     "seed": "ts-node-dev prisma/seed.ts"

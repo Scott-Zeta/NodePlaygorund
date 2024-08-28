@@ -1,6 +1,14 @@
 import SchemaBuilder from '@pothos/core';
+import { DateResolver } from 'graphql-scalars';
 
-const builder = new SchemaBuilder({});
+//import Scalars Date type to be used in the Schemabuilder
+const builder = new SchemaBuilder<{
+  Scalars: {
+    Date: { Input: Date; Output: Date };
+  };
+}>({});
+
+builder.addScalarType('Date', DateResolver, {});
 
 builder.queryType({
   fields: (t) => ({
