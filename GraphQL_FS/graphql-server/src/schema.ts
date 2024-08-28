@@ -5,11 +5,17 @@ import type PrismaTypes from '@pothos/plugin-prisma/generated';
 import { prisma } from './db';
 
 //import Scalars Date type to be used in the Schemabuilder
-const builder = new SchemaBuilder<{
+export const builder = new SchemaBuilder<{
   Scalars: {
     Date: { Input: Date; Output: Date };
   };
-}>({ plugins: [PrismaPlugin], prisma: { client: prisma } });
+  PrismaTypes: PrismaTypes;
+}>({
+  plugins: [PrismaPlugin],
+  prisma: {
+    client: prisma,
+  },
+});
 //builder require a prisma instance
 
 builder.addScalarType('Date', DateResolver, {});
