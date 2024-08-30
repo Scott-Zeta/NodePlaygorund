@@ -20,4 +20,7 @@ export const builder = new SchemaBuilder<{
 
 builder.addScalarType('Date', DateResolver, {});
 
+//initialize the query type
+builder.queryType({});
+
 export const schema = builder.toSchema();
