@@ -5,6 +5,7 @@
 - Railway to host your database
 - TypeScript as the programming language
 - GraphQL Yoga as the GraphQL server
+- Graphql-scalars for extend GraphQL data types
 - Pothos as the code-first GraphQL schema builder
 - Vite to manage and scaffold your frontend project
 - React as the frontend JavaScript library
