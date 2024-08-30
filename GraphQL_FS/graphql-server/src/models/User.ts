@@ -1,4 +1,4 @@
-import { builder } from '../schema';
+import { builder } from '../builder';
 import { prisma } from '../db';
 
 builder.prismaObject('User', {

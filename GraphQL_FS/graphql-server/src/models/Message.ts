@@ -1,4 +1,4 @@
-import { builder } from '../schema';
+import { builder } from '../builder';
 
 builder.prismaObject('Message', {
   fields: (t) => ({
