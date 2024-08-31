@@ -10,3 +10,5 @@ generates:
 # documents: A blob that finds any .graphql file in your codebase
 # generates: The configuration that tells GraphQL Codegen what to generate
 # and which plugins to use
+# Codegen will generate a file at ./src/graphql/generated.ts for
+# whole graphql map with any query.
