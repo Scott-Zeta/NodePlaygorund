@@ -12,9 +12,9 @@ function UserDisplay({ user }: Props) {
         <p className="text-xl text-gray-200 font-bold">{user.name}</p>
       </div>
       <div>
-        {user.messages.map((message, i) => (
+        {user.messages?.map((message, i) => (
           <MessageDisplay key={i} index={i} message={message} />
-        ))}
+        )) || <p className="text-gray-200">No messages available</p>}
       </div>
     </div>
   );

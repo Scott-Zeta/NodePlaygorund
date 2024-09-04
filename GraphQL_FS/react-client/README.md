@@ -1,3 +1,12 @@
+# Packages needed for client side for GraphQL
+
+- graphql: The library that allows you to use GraphQL.
+- @graphql-codegen/cli: The CLI tool that allows you to use different plugins to generate assets from a GraphQL API.
+- @graphql-codegen/typescript: The base plugin for GraphQL Codegen TypeScript-based plugins. This plugin takes your GraphQL API's schema and generates TypeScript types for each GraphQL type.
+- @graphql-codegen/typescript-operations: The GraphQL Codegen plugin that generates TypeScript types representing queries and responses based on queries you've written.
+- @graphql-codegen/typed-document-node: The GraphQL Codegen plugin that generates an Abstract Syntax Tree (AST) representation of any queries you've written.
+- urql: Query the graphql server
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -22,7 +31,7 @@ export default tseslint.config({
       tsconfigRootDir: import.meta.dirname,
     },
   },
-})
+});
 ```
 
 - Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
@@ -31,7 +40,7 @@ export default tseslint.config({
 
 ```js
 // eslint.config.js
-import react from 'eslint-plugin-react'
+import react from 'eslint-plugin-react';
 
 export default tseslint.config({
   // Set the react version
@@ -46,5 +55,5 @@ export default tseslint.config({
     ...react.configs.recommended.rules,
     ...react.configs['jsx-runtime'].rules,
   },
-})
+});
 ```

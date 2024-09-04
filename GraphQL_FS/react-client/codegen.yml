@@ -1,0 +1,14 @@
+schema: http://localhost:4000/graphql
+documents: './src/**/*.graphql'
+generates:
+  ./src/graphql/generated.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node
+# schema: The URL of your GraphQL schema
+# documents: A blob that finds any .graphql file in your codebase
+# generates: The configuration that tells GraphQL Codegen what to generate
+# and which plugins to use
+# Codegen will generate a file at ./src/graphql/generated.ts for
+# whole graphql map with any query.
