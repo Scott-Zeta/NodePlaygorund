@@ -5,6 +5,7 @@
 - @graphql-codegen/typescript: The base plugin for GraphQL Codegen TypeScript-based plugins. This plugin takes your GraphQL API's schema and generates TypeScript types for each GraphQL type.
 - @graphql-codegen/typescript-operations: The GraphQL Codegen plugin that generates TypeScript types representing queries and responses based on queries you've written.
 - @graphql-codegen/typed-document-node: The GraphQL Codegen plugin that generates an Abstract Syntax Tree (AST) representation of any queries you've written.
+- urql: Query the graphql server
 
 # React + TypeScript + Vite
 
